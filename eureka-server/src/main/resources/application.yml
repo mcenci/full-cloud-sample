@@ -1,0 +1,13 @@
+spring:  application:    name: eureka-server  jmx:    enabled: false  security:    user:      name: administrator      password: password  
+server:
+  port: 8761
+  address: eureka0pri.netsgroup.com
+  
+eureka:
+  instance:
+    hostname: eureka0pri.netsgroup.com  server:    wait-time-in-ms-when-sync-empty: 0
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/

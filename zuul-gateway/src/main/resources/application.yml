@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: api-gateway
+  jmx:
+    enabled: false
+    
+server:
+  port: 8080
+  
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    healthcheck:
+      enabled: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://administrator:password@eureka0pri.netsgroup.com:8761/eureka/
+
+feign:
+  httpclient:
+    enabled: true
+  okhttp:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+          
+management:
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+
+zuul:
+  ribbon:
+    eager-load:
+      enabled: true
+  routes:    web-application:
+      id: web-application
+      service-id: web-application
+      path: /waa/**
+    webservice-1: 
+      id: web-service-1
+      service-id: web-service-1
+      path: /ws1/**
+      strip-prefix: true
+    webservice-2: 
+      id: web-service-2
+      service-id: web-service-2
+      path: /ws2/**
+    web-service-2: /ws2/**

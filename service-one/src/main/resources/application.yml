@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: web-service-1
+  jmx:
+    enabled: false
+    
+server:
+  port: 8081
+  
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    healthcheck:
+      enabled: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://administrator:password@eureka0pri.netsgroup.com:8761/eureka/
+
+management:  endpoint:    health:      enabled: true
+    info:      enabled: true
+      

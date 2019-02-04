@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+	<title>Home</title>
+</head>
+
+<body>
+	<h3>LoadBalancing with Feign using Eureka server</h3>
+	
+	<h4>Calling a ws which calls another webservice with loadbalanced feign client</h4>
+	<ul th:each="item: ${s2Items}">
+		<li th:text="${item.name} + ' - ' + ${item.age} + ' - ' + ${item.origin}">
+	</ul>
+
+	<hr>
+	
+	<h4>Calling a ws with a loadbalanced feign client</h4>
+	<ul th:each="item: ${s1Items}">
+		<li th:text="${item.name} + ' - ' + ${item.age} + ' - ' + ${item.origin}">
+	</ul>
+	
+	<hr>
+	
+	<h5>ciao Bea!</h5>
+</body>
+
+</html>
