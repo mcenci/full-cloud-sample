@@ -22,7 +22,18 @@
 	
 	<hr>
 	
-	<h5>ciao Bea!</h5>
+	<h5>Call to RTSF API new</h5>
+	
+	<ul>
+		<li th:text="${customer.custId}">TEST</li>
+		<li>
+			<ul th:each="item: ${customer.emailDomain}">
+				<li th:text="${item}"></li>
+			</ul>
+		</li>
+	</ul>
+	
+	<textarea rows="10" cols="10" th:text="${private}"></textarea>
 </body>
 
 </html>

@@ -1,13 +1,13 @@
 package com.netsgroup.service;
 
 import java.util.List;
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.netsgroup.feign.CustomFeignClientConfiguration;
 
-@FeignClient(name = "web-service-1")
+@FeignClient(name = "web-service-1" , configuration = CustomFeignClientConfiguration.class)
 public interface ServiceTemplate {
 
 	@GetMapping(path = "/items" , consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)

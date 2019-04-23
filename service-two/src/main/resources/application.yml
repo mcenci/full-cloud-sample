@@ -6,17 +6,54 @@ spring:
     
 server:
   port: 8083
-  
+  address: 0.0.0.0
+#  address: cloud.netsgroup.com
+  ssl:
+    enabled: true
+    client-auth: none
+    key-store: classpath:cloud_certificate.jks
+    key-store-password: 123456
+    trust-store: classpath:cloud_certificate.jks
+    trust-store-password: 123456
+    
 eureka:
   instance:
+    hostname: cloud.netsgroup.com
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
     instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    statusPageUrl: https://${server.address}:${server.port}/actuator/info
+    healthCheckUrl: https://${server.address}:${server.port}/actuator/health
+    homePageUrl: https://${server.address}:${server.port}
   client:
+    initial-instance-info-replication-interval-seconds: 5
+    eureka-connection-idle-timeout-seconds: 10
+    eureka-service-url-poll-interval-seconds: 3
+    instance-info-replication-interval-seconds: 15
+    registry-fetch-interval-seconds: 15
+    should-enforce-registration-at-init: true   
     healthcheck:
       enabled: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://administrator:password@eureka0pri.netsgroup.com:8761/eureka/
+      defaultZone: https://administrator:password@${eureka.instance.hostname}:8761/eureka/
 
+feign:
+  okhttp:
+    enabled: false
+  httpclient:
+    enabled: true
+    disable-ssl-validation: true
+  ngs:
+    interceptor:
+      enable: true
+      key: 123456
+      key-type: secret
+      header-name: X-NGS-AUTH
+    filter:
+      enable: true 
+ 
 management:
   endpoint:
     health:

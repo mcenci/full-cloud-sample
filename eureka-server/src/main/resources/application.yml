@@ -1,11 +1,11 @@
 spring:  application:    name: eureka-server  jmx:    enabled: false  security:    user:      name: administrator      password: password  
 server:
   port: 8761
-  address: eureka0pri.netsgroup.com
+  address: 0.0.0.0  ssl:    enabled: true    client-auth: none    key-store: classpath:cloud_certificate.jks    key-store-password: 123456    trust-store: classpath:cloud_certificate.jks    trust-store-password: 123456
   
 eureka:
   instance:
-    hostname: eureka0pri.netsgroup.com  server:    wait-time-in-ms-when-sync-empty: 0
+    hostname: cloud.netsgroup.com    securePort: ${server.port}    securePortEnabled: true      nonSecurePortEnabled: false     homePageUrl: https://${eureka.instance.hostname}:${server.port}/    statusPageUrl: https://${eureka.instance.hostname}:${server.port}/admin/info  server:    wait-time-in-ms-when-sync-empty: 0
   client:
     registerWithEureka: false
     fetchRegistry: false
