@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: eureka-server
+  jmx:
+    enabled: true
+server:
+  port: 8761
+  address: localhost
+  ssl:
+    enabled: false
+  
+eureka:
+  instance:
+    hostname: localhost
+    securePort: ${server.port}
+    securePortEnabled: false  
+    nonSecurePortEnabled: true 
+    homePageUrl: http://${eureka.instance.hostname}:${server.port}/
+    statusPageUrl: http://${eureka.instance.hostname}:${server.port}/admin/info
+  client:
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/

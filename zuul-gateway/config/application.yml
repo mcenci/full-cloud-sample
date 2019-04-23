@@ -1,0 +1,123 @@
+spring:
+  application:
+    name: api-gateway
+  jmx:
+    enabled: false
+    
+server:
+  port: 8080
+  address: localhost
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+  ssl:
+    enabled: false
+    client-auth: want
+    ciphers:
+    - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+    - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+    - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+    - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+    - TLS_RSA_WITH_AES_128_CBC_SHA256
+    - TLS_RSA_WITH_AES_128_CBC_SHA
+    - TLS_RSA_WITH_AES_256_CBC_SHA256
+    - TLS_RSA_WITH_AES_256_CBC_SHA
+    enabled-protocols:
+    - TLSv1.2
+    protocol: TLS
+    key-store: classpath:cloud_certificate.jks
+    key-store-password: 123456
+    trust-store: classpath:cloud_certificate.jks
+    trust-store-password: 123456
+    
+eureka:
+  instance:
+    hostname: localhost
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    statusPageUrl: http://${server.address}:${server.port}/actuator/info
+    healthCheckUrl: http://${server.address}:${server.port}/actuator/health
+    homePageUrl: http://${server.address}:${server.port}
+  client:
+    initial-instance-info-replication-interval-seconds: 5
+    eureka-connection-idle-timeout-seconds: 10
+    eureka-service-url-poll-interval-seconds: 3
+    instance-info-replication-interval-seconds: 15
+    registry-fetch-interval-seconds: 15
+    should-enforce-registration-at-init: true  
+    healthcheck:
+      enabled: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://administrator:password@${eureka.instance.hostname}:8761/eureka/
+
+feign:
+  httpclient:
+    enabled: true
+  okhttp:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+  ngs:
+    filter:
+      enable: false
+    interceptor:
+      enable: false
+                
+management:
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+ribbon:
+  TrustStore: cloud_certificate.jks
+  TrustStorePassword : 123456
+  ReadTimeout: 60000
+  IsSecure: false
+  
+logging:
+  level:
+    com.netflix.discovery: OFF
+    
+zuul:
+  ssl-hostname-validation-enabled: false
+  ribbon:
+    eager-load:
+      enabled: true
+  sensitive-headers: ''
+  routes:
+    authentication:
+      id: oauth2-server
+      service-id: oauth2-server
+      path: /uaa/**
+      strip-prefix: false
+    web-application:
+      id: web-application
+      service-id: web-application
+      path: /waa/**
+      strip-prefix: false
+    authorization-app:
+      service-id: authorization-app
+      path: /authorization/**
+    authorization-api:
+      service-id: authorization-api
+      path: /tr/**
+    tpp-api:
+      service-id: tpp-api
+      path: /tpp/**
+#    webservice-1: 
+#      id: web-service-1
+#      service-id: web-service-1
+#      path: /ws1/**
+#    webservice-2: 
+#      id: web-service-2
+#      service-id: web-service-2
+#      path: /ws2/**

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+	<title>Home</title>
+	
+</head>
+
+<body>
+	<h3>Welcome user</h3>
+	<p>You are logged in</p>
+	<a th:href="@{/v2/test}" id="prova" >Prova link</a>
+	<form th:action="@{/logout}" method="post">
+	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+	    <input type="submit" value="Logout">
+	</form>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script th:inline="javascript">
+
+	var token = /*[[${at}]]*/ 'unToken';
+
+	function linkInterceptor(linkName) {
+	    var $link = $("#" + linkName);
+
+	    $link.on('click', function(e) {
+	        e.preventDefault();
+	        $.ajax({
+	            url : $link.attr('href'),
+	            type : 'get',
+	            beforeSend: function(xhr) {
+	            	console.log(token);
+	    	        xhr.setRequestHeader('X-AUTH', token);
+	    	    }
+	            success : function(response) {
+	                console.log(response);
+	            }
+	        });
+	    });
+	};
+	</script>
+</body>
+
+</html>

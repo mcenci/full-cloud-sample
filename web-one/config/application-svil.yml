@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: web-application
+  jmx:
+    enabled: false
+    
+server:
+  port: 8090
+  address: localhost
+  servlet:
+    context-path: /waa
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+#  address: cloud.netsgroup.com
+  ssl:
+    enabled: false
+    client-auth: none
+    key-store: classpath:cloud_certificate.jks
+    key-store-password: 123456
+    trust-store: classpath:cloud_certificate.jks
+    trust-store-password: 123456
+    
+eureka:
+  instance:
+    hostname: cloud.netsgroup.com
+    nonSecurePortEnabled: true
+    securePortEnabled: false
+    securePort: ${server.port}
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    statusPageUrl: http://${server.address}:${server.port}/waa/actuator/info
+    healthCheckUrl: http://${server.address}:${server.port}/waa/actuator/health
+    homePageUrl: http://${server.address}:${server.port}
+  client:
+    initial-instance-info-replication-interval-seconds: 2
+    eureka-connection-idle-timeout-seconds: 5
+    eureka-service-url-poll-interval-seconds: 2
+    instance-info-replication-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+    should-enforce-registration-at-init: true   
+    healthcheck:
+      enabled: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://administrator:password@${eureka.instance.hostname}:8761/eureka/
+
+feign:  ngs:
+    interceptor:
+      enable: true
+      key: 123456
+      key-type: secret
+      header-name: X-NGS-AUTH
+    filter:
+      enable: false 
